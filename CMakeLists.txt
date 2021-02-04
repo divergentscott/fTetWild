@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.8)
 project(FloatTetwild)
 ################################################################################
 
+include(conan.cmake)
+conan_cmake_run(CONANFILE conanfile.py
+		BASIC_SETUP CMAKE_TARGETS
+		BUILD missing
+		KEEP_RPATHS
+		OPTIONS ${REGRESSION_DATA})
+
 # Detects whether this is a top-level project
 get_directory_property(HAS_PARENT PARENT_DIRECTORY)
 if(HAS_PARENT)
@@ -76,10 +83,10 @@ include(FloatTetwildDependencies)
 # FloatTetwild library
 ################################################################################
 
-find_package(GMPfTetWild)
-IF(NOT ${GMP_FOUND})
-	MESSAGE(FATAL_ERROR "Cannot find GMP")
-ENDIF()
+#find_package(GMPfTetWild)
+#IF(NOT ${GMP_FOUND})
+#	MESSAGE(FATAL_ERROR "Cannot find GMP")
+#ENDIF()
 
 # find_package(MPFR)
 # IF(NOT ${MPFR_FOUND})
@@ -130,6 +137,8 @@ target_link_libraries(${PROJECT_NAME}
 		${GMP_LIBRARIES}
 		# ${MPFR_LIBRARIES}
 )
+
+
 if(FLOAT_TETWILD_ENABLE_TBB)
 	target_link_libraries(${PROJECT_NAME} PUBLIC tbb::tbb)
 	target_compile_definitions(${PROJECT_NAME} PUBLIC FLOAT_TETWILD_USE_TBB)
